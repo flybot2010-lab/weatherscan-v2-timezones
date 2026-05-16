@@ -820,7 +820,7 @@ function getExtraCore(locNum) {
         }
         weatherData.localForecast.extraLoc[locNum] = eLocLF;
     }).fail(function() {
-      weatherData.localForecast.extraLoc[locNum].locationName = systemSettings.extraCity.cities[locNum].obsName
+      weatherData.localForecast.extraLoc[locNum].locationName = systemSettings.mainCity.locationName
       weatherData.localForecast.extraLoc[locNum] = true
     })
   }
