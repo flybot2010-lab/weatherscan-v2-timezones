@@ -10,6 +10,11 @@ secrets.js
 temp.json
 islip-config.json
 jensonConfig.json
+
+myConfig-joe.json
+myConfig-jenson.json
+myConfig-colster.json
+
 test/
 lamberttest3/
 
