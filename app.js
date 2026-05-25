@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const tzlookup = require("@photostructure/tz-lookup");
 const app = express();
 const port = 3000;
 
@@ -20,6 +21,29 @@ app.get('/airports', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch airport data' });
     }
 })
+
+app.get('/tz', (req, res) => {
+    try {
+        const lat = parseFloat(req.query.lat);
+        const lon = parseFloat(req.query.lon);
+        if (isNaN(lat) || isNaN(lon)) {
+            return res.status(400).json({
+                error: 'invalid'
+            });
+        }
+        const timezone = tzlookup(lat, lon);
+        res.json({
+            lat,
+            lon,
+            timezone
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: 'failed',
+            details: error.message
+        });
+    }
+});
 
 //npm i http-proxy-middleware
 //  ^ THIS IS IMPORTANT ^
