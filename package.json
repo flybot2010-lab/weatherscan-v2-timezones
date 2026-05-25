@@ -6,8 +6,7 @@
   "dependencies": {
     "@photostructure/tz-lookup": "^11.5.0",
     "express": "^5.1.0",
-    "http-proxy-middleware": "^3.0.5",
-    "tz-lookup": "^6.1.25"
+    "http-proxy-middleware": "^3.0.5"
   },
   "scripts": {
     "start": "node app.js",
