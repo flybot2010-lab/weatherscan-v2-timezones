@@ -24,17 +24,21 @@ app.get('/airports', async (req, res) => {
 
 app.get('/tz', (req, res) => {
     try {
-        const lat = parseFloat(req.query.lat);
-        const lon = parseFloat(req.query.lon);
-        if (isNaN(lat) || isNaN(lon)) {
+        const geocode = req.query.geocode;
+        if (!geocode || typeof geocode !== 'string') {
             return res.status(400).json({
                 error: 'invalid'
             });
         }
+        const parts = geocode.split(',').map(v => parseFloat(v.trim()));
+        if (parts.length !== 2 || parts.some(n => isNaN(n))) {
+            return res.status(400).json({
+                error: 'invalid'
+            });
+        }
+        const [lat, lon] = parts;
         const timezone = tzlookup(lat, lon);
         res.json({
-            lat,
-            lon,
             timezone
         });
     } catch (error) {

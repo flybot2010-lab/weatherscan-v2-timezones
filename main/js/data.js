@@ -1,4 +1,5 @@
 var locationChoice = "main"
+let currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 var weatherData = {
   alerts: {
     mainLoc: {
@@ -2399,6 +2400,7 @@ function startPrograms() {
   // } catch (error) {
   //   lBarData.radarUnavailable = true
   // }
+  updateTimezoneFromGeocode()
   slideKickOff()
   alignDataMaps()
   createMiniradarCities()
@@ -2408,6 +2410,20 @@ function startPrograms() {
     $('#startup').fadeOut(0);
   }, 10);
 }
+
+async function updateTimezoneFromGeocode() {
+    if (!locationDataHeaders.mainData.alerts.mainLoc) return;
+    try {
+        const res = await fetch(`/tz?${locationDataHeaders.mainData.alerts.mainLoc}`);
+        const data = await res.json();
+        if (data.timezone) {
+            currentTimezone = data.timezone;
+        }
+    } catch (err) {
+        console.error("timezone failed, defaulting to system", err);
+    }
+}
+
 function dataJS() {
   initializeRadars()
   //initializeDataMaps()
@@ -2415,11 +2431,22 @@ function dataJS() {
       preloadRadars(systemSettings.appearanceSettings.startupTime - 3000);
     }, 3000);
   setInterval(function () {
-    var today = new Date();
-    var date = today.toString().replace('01', '1').replace('02', '2').replace('03', '3').replace('04', '4').replace('05', '5').replace('06', '6').replace('07', '7').replace('08', '8').replace('09', '9').slice(4,10).trimRight() 
-    var time = today.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric', second: 'numeric'}).replace(/ /g,' ').toLowerCase().replaceAll(" ", "")
-    var spacer = ((time.length > 7) ? " " : "  ")
-    $('#date-time').text(date + "\n" + time);
+	  const now = new Date()
+	  const formatter = new Intl.DateTimeFormat('en-US', {
+		  timeZone: currentTimezone,
+		  hour: 'numeric',
+		  minute: 'numeric',
+		  second: 'numeric',
+		  hour12: true
+	  });
+	  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+		  timeZone: currentTimezone,
+		  month: 'short',
+		  day: 'numeric'
+	  });
+	  const time = formatter.format(now).toLowerCase().replace(/ /g, '');
+	  const date = dateFormatter.format(now);
+	  $('#date-time').text(date + "\n" + time);
   }, 1000);
   setTimeout(function() {
     startPrograms()
