@@ -30,48 +30,16 @@ function startupAnimations() {
   }, 400);
 }
 var windowStatus = window.location.search ? window.location.search.split("?")[1] : undefined;
-if (windowStatus == "nationalForecast") {
+if (windowStatus == "national") {
   $.getJSON("configs/national.json", function(data) {
     systemSettings = data.jsonSystemSettings
-    //console.log("Updated location settings:", systemSettings);
-    //console.log(slideSettings.order[0])
-    api_key = systemSettings.apiKeys.api_key
-    map_key = systemSettings.apiKeys.map_key
-    traf_key = systemSettings.apiKeys.traf_key
-  })
-} else if (windowStatus == "debugJoeMist") {
-  $.getJSON("configs/myConfig-joe.json", function(data) {
-    systemSettings = data.jsonSystemSettings
-    //console.log("Updated location settings:", systemSettings);
-    //console.log(slideSettings.order[0])
-    api_key = systemSettings.apiKeys.api_key
-    map_key = systemSettings.apiKeys.map_key
-    traf_key = systemSettings.apiKeys.traf_key
-  })
-} else if (windowStatus == "debugJensonMist") {
-  $.getJSON("configs/myConfig-jenson.json", function(data) {
-    systemSettings = data.jsonSystemSettings
-    //console.log("Updated location settings:", systemSettings);
-    //console.log(slideSettings.order[0])
-    api_key = systemSettings.apiKeys.api_key
-    map_key = systemSettings.apiKeys.map_key
-    traf_key = systemSettings.apiKeys.traf_key
-  })
-} else if (windowStatus == "debugColsterMist") {
-  //no more debug configs after this one i swear
-  $.getJSON("configs/myConfig-colster.json", function(data) {
-    systemSettings = data.jsonSystemSettings
-    //console.log("Updated location settings:", systemSettings);
-    //console.log(slideSettings.order[0])
     api_key = systemSettings.apiKeys.api_key
     map_key = systemSettings.apiKeys.map_key
     traf_key = systemSettings.apiKeys.traf_key
   })
 } else {
-  $.getJSON("configs/yourConfig.json", function(data) {
+  $.getJSON("configs/main.json", function(data) {
     systemSettings = data.jsonSystemSettings
-    //console.log("Updated location settings:", systemSettings);
-    //console.log(slideSettings.order[0])
     api_key = systemSettings.apiKeys.api_key
     map_key = systemSettings.apiKeys.map_key
     traf_key = systemSettings.apiKeys.traf_key
@@ -115,11 +83,6 @@ function startSystem() {
     //versionCheck(systemSettings.appearanceSettings.version)
     $(setWeatherReadyLogo(systemSettings.appearanceSettings.weatherReadyLogo)).fadeIn(0)
     seticonConfiguration(systemSettings.appearanceSettings.iconSet)
-    if (systemSettings.appearanceSettings.adMessage[0] == "network") {
-      $.getJSON("https://mistwx.com/crawlnetwork.json", function(data) {
-        systemSettings.appearanceSettings.adMessage = data.crawls.scanv2
-      })
-    }
     //slideSettings.order[0].slideLineup.push(introPackage);
 
     if (systemSettings.traffic.autoFind || traf_key == "nada" || traf_key == "") {

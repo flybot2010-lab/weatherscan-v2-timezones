@@ -3803,14 +3803,6 @@ var extraSlides = {
 	],
 }
 
-function versionCheck(version) {
-	$.getJSON("https://mistwx.com/crawlnetwork.json", function(data) {
-		if (version != data.simVersions.scanv2) {
-			alert("New update available. Download latest version at\nhttps://github.com/MistWeatherMedia/weatherscan-v2")
-		}
-	})
-}
-
 var codeToShortFcst = {
 	300: "Strong to severe thunderstorms.",
 	310: "Windy with strong thunderstorms.",
