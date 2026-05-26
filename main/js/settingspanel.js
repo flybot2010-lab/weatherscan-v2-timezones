@@ -21,6 +21,94 @@ var packageLibrary = {
   "severe2":severePackageTwo,
 }
 
+const params = new URLSearchParams(window.location.search);
+const windowStatus = params.has("national") ? "national" : undefined;
+
+function setNested(obj, path, value) {
+    const keys = path.split(".");
+    let current = obj;
+
+    for (let i = 0; i < keys.length - 1; i++) {
+        if (
+            current == null ||
+            typeof current !== "object" ||
+            !(keys[i] in current)
+        ) {
+            console.log("Path missing:", path);
+            return false;
+        }
+
+        current = current[keys[i]];
+    }
+
+    const finalKey = keys[keys.length - 1];
+
+    if (!(finalKey in current)) {
+        console.log("Key missing:", path);
+        return false;
+    }
+
+    const oldVal = current[finalKey];
+
+    if (typeof oldVal === "boolean") {
+        value = value === "true";
+    } else if (typeof oldVal === "number") {
+        value = Number(value);
+    }
+
+    current[finalKey] = value;
+
+    console.log("Updated:", path, value);
+    return true;
+}
+
+function applyManualConfig() {
+    if (!params.has("manualconfig")) return;
+
+    params.forEach((value, key) => {
+        if (
+            key === "manualconfig" ||
+            key === "national" ||
+            key.startsWith("debug")
+        ) return;
+
+        setNested(systemSettings, key, value);
+    });
+
+    console.log(systemSettings);
+}
+
+if (windowStatus == "national") {
+    $.getJSON("configs/national.json", function(data) {
+        systemSettings = data.jsonSystemSettings;
+
+        api_key = systemSettings.apiKeys.api_key;
+        map_key = systemSettings.apiKeys.map_key;
+        traf_key = systemSettings.apiKeys.traf_key;
+
+        applyManualConfig();
+    });
+} else {
+    $.getJSON("configs/main.json", function(data) {
+        systemSettings = data.jsonSystemSettings;
+
+        api_key = systemSettings.apiKeys.api_key;
+        map_key = systemSettings.apiKeys.map_key;
+        traf_key = systemSettings.apiKeys.traf_key;
+
+        applyManualConfig();
+
+        if (
+            !params.has("nationalForecast") &&
+            !params.has("debugJoeMist") &&
+            !params.has("debugJensonMist") &&
+            !params.has("debugColsterMist")
+        ) {
+            locationJS();
+        }
+    });
+}
+
 function startupAnimations() {
   //start spinning the logo
   //delay 3 seconds
@@ -29,29 +117,8 @@ function startupAnimations() {
     $("#startup #startup-twc-logo").fadeIn(250)
   }, 400);
 }
-var windowStatus = window.location.search ? window.location.search.split("?")[1] : undefined;
-if (windowStatus == "national") {
-  $.getJSON("configs/national.json", function(data) {
-    systemSettings = data.jsonSystemSettings
-    api_key = systemSettings.apiKeys.api_key
-    map_key = systemSettings.apiKeys.map_key
-    traf_key = systemSettings.apiKeys.traf_key
-  })
-} else {
-  $.getJSON("configs/main.json", function(data) {
-    systemSettings = data.jsonSystemSettings
-    api_key = systemSettings.apiKeys.api_key
-    map_key = systemSettings.apiKeys.map_key
-    traf_key = systemSettings.apiKeys.traf_key
 
-    var q = window.location.search ? window.location.search.split("?")[1] : undefined;
-    if (q != "nationalForecast" /**temp code for now -> */ && q != "debugJoeMist" && q != "debugJensonMist" && q != "debugColsterMist") {
-        locationJS()
-    }
-  })
-}
-
-  
+ 
 function startSystem() {
   console.log(systemSettings)
   //api_key = systemSettings.apiKeys.api_key

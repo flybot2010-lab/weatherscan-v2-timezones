@@ -230,7 +230,7 @@ function locationJS() {
 var mainquery = window.location.search == "" ? undefined : window.location.search.replaceAll("?", "").replaceAll("%20", " ");
 function grabMainCity() {
     //mainquery = window.location.search == "" ? undefined : window.location.search.replaceAll("?", "").replaceAll("%20", " ");
-    if (mainquery != undefined && mainquery != "nationalForecast") {
+    if (mainquery != undefined && mainquery != "national" && !mainquery.includes("manualconfig")) {
         $.getJSON("https://api.weather.com/v3/location/search?query=" + mainquery + "&language=en-US&format=json&apiKey=" + systemSettings.apiKeys.api_key, function (data) {
             //maincity
             systemSettings.mainCity.locationName = data.location.displayName[0].replaceAll("Charter Township", "").replaceAll("Township", "");
