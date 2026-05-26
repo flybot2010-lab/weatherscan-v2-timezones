@@ -3,7 +3,7 @@ const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const tzlookup = require("@photostructure/tz-lookup");
 const app = express();
-const port = 3000;
+const port = 9090;
 
 app.use(express.static(path.join(__dirname, 'main')));
 
