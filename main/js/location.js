@@ -243,6 +243,7 @@ function grabMainCity() {
             if (systemSettings.dataMaps.auto) {
                 centerDataMaps(data.location.adminDistrictCode[0]);
             }
+            systemSettings.mainCity.timeZone = data.location.ianaTimeZone[0];
             systemSettings.mainCity.radar.lat = data.location.latitude[0];
             systemSettings.mainCity.radar.lon = data.location.longitude[0];
             if (systemSettings.mainCity.radar.auto) {
@@ -430,8 +431,7 @@ function grabNearbyCities(lat, lon) {
     });
 }
 function createNewNearbyCity(icao) {
-	if (extraCityObj.locationID == systemSettings.mainCity.locationID) return;
-        if (icao == systemSettings.mainCity.locationID) return;
+    var locName, dontPush;
     $.getJSON(`https://api.weather.com/v3/location/point?icaoCode=${icao}&language=en-US&format=json&apiKey=${systemSettings.apiKeys.api_key}`, function (data) {
         locName = data.location.displayName.replace(" Charter Township", "").replace(" Township", "");
         /*if(data.location.locale["locale4"] != null){
@@ -516,7 +516,7 @@ function createNewExtraCity(lat, lon, dist) {
                 return;
             }
         }*/
-	if (extraCityObj.locationID == systemSettings.mainCity.locationID) return;
+        if (extraCityObj.locationID == systemSettings.mainCity.locationID) return;
         for (let i = 0; i < newExtraCities.length; i++) {
             if (extraCityObj.locationName == newExtraCities[i].locationName) {
                 dontPush = true;
@@ -552,7 +552,7 @@ function addExtraCities() {
     }
     if(systemSettings.extraCity.cities.length == 0){
         for(let i = 0; i < systemSettings.packageSettings.length; i++){
-            systemSettings.packageSettings[i] = systemSettings.packageSettings[i].replaceAll("extralocal", Math.random() > 0.5 ? "minicoreone" : "minicoretwo");
+            systemSettings.packageSettings[i] = systemSettings.packageSettings[i].replaceAll("extralocal", Math.random() > 0.5 ? "minicoreone" : "minicoretwo").replaceAll("golf", Math.random() > 0.5 ? "minicoreone" : "minicoretwo");
         }
     }
 }
@@ -673,10 +673,10 @@ function getTravelMapLimits(type) {
     if (type[0] == "pacific" && type[1] == "north") {
         return [120, -340, 310, -1050];
     }
-    if(type[0] == "atlantic" && type[1] == null){
-         return [225, -225, 1085, -285]
+    if(type[0] == "atlantic" && !type[1]){
+        return [225, -225, 1085, -285]
     }
-    return [255, -255, 685, -685]
+    return [225, -225, 685, -685];
 }
 
 function initTravelMap() {
