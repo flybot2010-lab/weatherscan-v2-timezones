@@ -430,8 +430,7 @@ function grabNearbyCities(lat, lon) {
     });
 }
 function createNewNearbyCity(icao) {
-    v
-	if (extraCityObj.locationID == systemSettings.mainCity.locationID) return;ar locName, dontPush;
+	if (extraCityObj.locationID == systemSettings.mainCity.locationID) return;
         if (icao == systemSettings.mainCity.locationID) return;
     $.getJSON(`https://api.weather.com/v3/location/point?icaoCode=${icao}&language=en-US&format=json&apiKey=${systemSettings.apiKeys.api_key}`, function (data) {
         locName = data.location.displayName.replace(" Charter Township", "").replace(" Township", "");

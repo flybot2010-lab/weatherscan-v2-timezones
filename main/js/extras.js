@@ -2342,20 +2342,7 @@ function getIcon(div, iconCode, type, size) {
 	if (iconCode == "blank" || iconCode == "" || iconCode == null || iconCode == undefined || iconCode == " ") {
 		div.css({"background-image":"url(images/icons" + systemSettings.appearanceSettings.iconSet + "/blank.png)","background-size":"100% 100%"})
 	} else {
-		var sizepath = ""
-		if (size == "large") {
-			sizepath = "large/"
-		} else if (size == "medium") {
-			sizepath = "medium/"
-		} else if (size == "small") {
-			sizepath = "small/"
-		} else if (size == "map") {
-			sizepath = "map/"
-		} else if (size == undefined) {
-			sizepath = "large/"
-		} else {
-			sizepath = "large/"
-		}
+		var sizepath = "large/"
 		if (type == "current") {
 			div.css({"background-image":"url(images/icons" + systemSettings.appearanceSettings.iconSet + "/" + sizepath + codeToCurrent[iconCode].iconFile + ".webp)","background-size":"100% 100%"})
 		} else if (type == "forecast") {
