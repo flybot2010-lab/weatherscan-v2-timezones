@@ -941,7 +941,7 @@ function getExtraCore(locNum) {
 }
 function getSpanishData() {
   function getCurrent() {
-    var url = "https://api.weather.com/v3/wx/observations/current?icaoCode=" + systemSettings.mainCity.obsIcaoCode + "&units=e&language=es-US&format=json&apiKey=" + api_key
+    var url = "https://api.weather.com/v3/wx/observations/current?" + locationDataHeaders.mainData.currentConditions.spanish + "&units=e&language=es-US&format=json&apiKey=" + api_key
     $.getJSON(url, function(data) {
       weatherData.currentConditions.spanish.locationName = systemSettings.mainCity.obsName
       weatherData.currentConditions.spanish.noReport = false
@@ -963,7 +963,7 @@ function getSpanishData() {
   }
   getCurrent()
   function getDayPart() {
-    var url = "https://api.weather.com/v3/wx/forecast/hourly/2day?geocode=" + systemSettings.mainCity.lat + "," + systemSettings.mainCity.lon + "&format=json&units=e&language=es-US&apiKey=" + api_key
+    var url = "https://api.weather.com/v3/wx/forecast/hourly/2day?" + locationDataHeaders.mainData.dayPart.spanish + "&format=json&units=e&language=es-US&apiKey="
     var currenthr = dateFns.getHours(new Date());
     $.getJSON(url, function(data) {
       var targetHours
@@ -1931,7 +1931,8 @@ function getIntlData() {
       url = url + `${systemSettings.international.forecast[i].lat},${systemSettings.international.forecast[i].lon};`;
     }
     url += "&language=en-US&units=e&format=json&apiKey=" + api_key;
-    weatherData.internationalForecast.cities = []
+    weatherData.internationalForecast.cities = [];
+    weatherData.internationalForecast.dayName = ["null","null","null"]
     $.getJSON(url, function(data){
       data.forEach((ajaxedLoc, i) => {
         var ii = 1;

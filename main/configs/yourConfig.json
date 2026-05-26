@@ -8,13 +8,13 @@
         "systemLocation":"",
         "appearanceSettings":{
             "nationalConfig":false,
-            "iconSet":"2010",
-            "providerName":"Mist Digital Cable",
+            "iconSet":"2005",
+            "providerName":"ClosedTelecom",
             "startupTime":15000,
             "crawlMode":"both",
             "adMessage":["network"],
             "providerType":"provider",
-            "providerImage":"mistdc",
+            "providerImage":"ctLogo",
             "adImages":[],
             "version":"1.0.0",
             "backgroundImage":"wxscan_default_bg_new",
@@ -202,6 +202,20 @@
           ]
         },
         "international": {
+	"mapOrder": [
+            "europe",
+            "canada",
+            "caribbean",
+            "southamerica",
+            "britain",
+            "mexico",
+            "africa",
+            "india",
+            "eastasia",
+            "oceania",
+            "australia"
+          ],
+          "maxMaps": 2,
           "map": {
             "canada": [
               {"locationName":"Dawson","lat":"64.0639","lon":"-139.4333"},
